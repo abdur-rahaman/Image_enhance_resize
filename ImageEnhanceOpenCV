@@ -1,0 +1,32 @@
+import cv2
+
+def apply_clahe(image, clip_limit=2.0, tile_grid_size=(8, 8)):
+    # Convert the input RGB image to LAB color space
+    lab_image = cv2.cvtColor(image, cv2.COLOR_BGR2Lab)
+    
+    # Split the LAB image into L, A, and B channels
+    l_channel, a_channel, b_channel = cv2.split(lab_image)
+    
+    # Apply CLAHE to the L channel
+    clahe = cv2.createCLAHE(clipLimit=clip_limit, tileGridSize=tile_grid_size)
+    enhanced_l_channel = clahe.apply(l_channel)
+    
+    # Merge the enhanced L channel with the original A and B channels
+    enhanced_lab_image = cv2.merge((enhanced_l_channel, a_channel, b_channel))
+    
+    # Convert the enhanced LAB image back to the RGB color space
+    enhanced_rgb_image = cv2.cvtColor(enhanced_lab_image, cv2.COLOR_Lab2BGR)
+    
+    return enhanced_rgb_image
+
+# Load your RGB image
+input_image = cv2.imread('your_image.jpg')
+
+# Apply CLAHE enhancement
+enhanced_image = apply_clahe(input_image)
+
+# Display the original and enhanced images
+cv2.imshow('Original Image', input_image)
+cv2.imshow('Enhanced Image', enhanced_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

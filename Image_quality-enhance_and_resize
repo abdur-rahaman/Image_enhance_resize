@@ -1,0 +1,38 @@
+from PIL import Image, ImageOps, ImageFilter
+import os
+
+# Directory containing the input images
+input_directory = "/home/la-belva/Downloads/contest-images (1)/contest-images"
+
+# Directory where resized and enhanced images will be saved
+output_directory = "/home/la-belva/Downloads/contest-images (1)/final_output"  # Replace with the desired output folder path
+
+# Desired target dimensions for resizing
+target_width = 200
+target_height = 350
+
+# Ensure the output directory exists; create it if necessary
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+
+# Iterate over all images in the input directory
+for filename in os.listdir(input_directory):
+    if filename.endswith('.png'):
+        # Load the input image
+        input_image_path = os.path.join(input_directory, filename)
+        input_image = Image.open(input_image_path)
+
+        # Resize the image to the desired dimensions
+        resized_image = input_image.resize((target_width, target_height))
+
+        # Apply sharpening (enhancement) to the resized image
+        enhanced_image = resized_image.filter(ImageFilter.SHARPEN)
+
+        # Construct the output file path with the same filename
+        output_filename = filename
+        output_path = os.path.join(output_directory, output_filename)
+
+        # Save the resized and enhanced image to the output directory
+        enhanced_image.save(output_path)
+
+print("Resizing and enhancement complete. Resized and enhanced images are saved in:", output_directory)
